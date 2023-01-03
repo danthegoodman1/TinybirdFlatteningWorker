@@ -35,10 +35,12 @@ export default {
 			newRows.push(JSON.stringify(flatten(JSON.parse(row))))
 		}
 		const { searchParams } = new URL(request.url)
-		const res = await fetch(`${searchParams.get('tb_url')}`, {
+		const headers = new Headers(request.headers)
+		headers.delete('content-length')
+				const res = await fetch(`${searchParams.get('tb_url')}`, {
 			method: 'POST',
 			body: newRows.join("\n"),
-			headers: request.headers
+			headers: headers
 		})
 
 		let { readable, writable } = new TransformStream()
